@@ -1,4 +1,4 @@
-# 🔄 JavaScript Code Merger - Fusionneur Intelligent (Claude Sonnet 4)
+# 🔄 JavaScript Code Merger - Fusionneur Intelligent (Claude 4)
 
 <div align="center">
 
