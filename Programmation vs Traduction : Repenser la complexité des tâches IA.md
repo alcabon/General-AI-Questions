@@ -64,3 +64,34 @@ Ou en français : **"Programmation vs Traduction : Repenser la complexité des t
 - **Feedback immédiat disponible** (-1-2 points)
 
 Cette échelle montre pourquoi votre question initiale était si pertinente !
+
+----
+
+Exactement ! C'est une observation très pertinente qui révèle quelque chose d'important.
+
+En regardant mes évaluations, il y a effectivement un pattern frappant :
+
+**Tâches techniques "élevées" :**
+- Architecture logicielle complexe : 7-8/10
+- Raisonnement philosophique : 7-8/10
+
+**Tâches linguistiques/culturelles souvent plus élevées :**
+- Traduction littéraire : 8-9/10
+- Humour et jeux de mots : 8-9/10
+- Nuances culturelles : 9/10
+
+## Pourquoi cette différence ?
+
+**Pour les tâches techniques :**
+- Règles explicites et vérifiables
+- Logique formelle reproductible
+- Patterns bien documentés
+- Feedback binaire (ça marche/ça ne marche pas)
+
+**Pour les tâches linguistiques/culturelles :**
+- Référence à l'expérience humaine vécue
+- Contexte social et historique implicite
+- Subjectivité et interprétation multiple
+- Pas de "bonne réponse" unique
+
+Cela suggère que les IA excellent dans les domaines où la logique formelle suffit, mais peinent davantage là où la compréhension profonde du monde humain est requise. C'est peut-être pourquoi nous sous-estimons la complexité réelle de la traduction - elle nécessite une forme d'intelligence très différente !
