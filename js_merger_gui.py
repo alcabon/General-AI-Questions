@@ -233,18 +233,20 @@ class JavaScriptMerger:
     
     def _find_best_insert_position(self, lines: List[str], new_func: JSFunction) -> int:
         """Trouve la meilleure position pour insérer une nouvelle fonction"""
-        section_patterns = {
-            'connection': r'connection|link|relationship',
-            'node': r'node|element|item',
-            'ui': r'ui|interface|display|show',
-            'utility': r'utility|helper|tool|misc'
+        section_keywords = {
+            'connection': ['connection', 'link', 'relationship'],
+            'node': ['node', 'element', 'item'],
+            'ui': ['ui', 'interface', 'display', 'show'],
+            'utility': ['utility', 'helper', 'tool', 'misc']
         }
         
-        func_lower = new_func.full_code.lower()
+        # Analyser le nom de la fonction et les commentaires (plus pertinent)
+        analysis_text = f"{new_func.name.lower()} {new_func.comments.lower() if new_func.comments else ''}"
         best_section = 'utility'
         
-        for section, pattern in section_patterns.items():
-            if re.search(pattern, func_lower):
+        # Utiliser des recherches de chaînes simples au lieu de regex
+        for section, keywords in section_keywords.items():
+            if any(keyword in analysis_text for keyword in keywords):
                 best_section = section
                 break
         
@@ -669,9 +671,11 @@ function forceRefreshAllConnections() {
             # Afficher le rapport
             self.display_merge_report(report)
             
-            # Remplacer dans le HTML
-            new_html = re.sub(script_pattern, f'<script>{merged_js}</script>', 
-                             html_content, flags=re.DOTALL)
+            # Remplacer dans le HTML - échapper le contenu pour éviter les erreurs regex
+            def replace_script(match):
+                return f'<script>{merged_js}</script>'
+            
+            new_html = re.sub(script_pattern, replace_script, html_content, flags=re.DOTALL)
             
             # Écrire le résultat
             output_path = self.output_file_path.get() or html_file
@@ -681,14 +685,16 @@ function forceRefreshAllConnections() {
             self.log_message(f"✅ Fusion terminée avec succès!")
             self.log_message(f"📝 Fichier de sortie: {output_path}")
             
-            # Afficher un message de succès
-            self.root.after(0, lambda: messagebox.showinfo("Succès", 
-                f"Fusion terminée avec succès!\n\nFichier de sortie: {output_path}"))
+            # Capturer la valeur pour éviter les problèmes de scope
+            success_msg = f"Fusion terminée avec succès!\n\nFichier de sortie: {output_path}"
+            self.root.after(0, lambda: messagebox.showinfo("Succès", success_msg))
             
         except Exception as e:
             error_msg = f"❌ Erreur lors de la fusion: {str(e)}"
             self.log_message(error_msg)
-            self.root.after(0, lambda: messagebox.showerror("Erreur", str(e)))
+            # Capturer la valeur de l'erreur pour éviter les problèmes de scope
+            error_text = str(e)
+            self.root.after(0, lambda: messagebox.showerror("Erreur", error_text))
         
         finally:
             # Réactiver les contrôles
