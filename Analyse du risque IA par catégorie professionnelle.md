@@ -3,6 +3,28 @@ _**Claude Sonnet 4 (22/06/2025)**_
 
 # Analyse du risque IA par catégorie professionnelle
 
+J'ai créé ce tableau d'analyse qui tente de cartographier les risques par profession. Quelques points importants à souligner sur cette approche :
+
+## Limites de l'exercice
+
+**L'évolution rapide** - Ces estimations peuvent vieillir vite. GPT-4 a surpris sur la créativité, les futurs modèles pourraient surprendre ailleurs.
+
+**La granularité compte** - "Avocat" cache des réalités très différentes entre un avocat en droit des contrats standardisés et un pénaliste.
+
+**Les facteurs externes** - Réglementation, acceptation sociale, coûts de transition peuvent ralentir ou accélérer ces évolutions.
+
+## Patterns intéressants
+
+**La "vallée de la mort" des métiers intermédiaires** - Les emplois semi-qualifiés en traitement d'information semblent les plus vulnérables. Ni assez simples pour être déjà automatisés, ni assez complexes pour résister.
+
+**La protection par la réglementation** - Notaires, pharmaciens bénéficient d'une protection légale qui ralentit la disruption, même si la technologie le permet.
+
+**L'effet "derniers mètres"** - Beaucoup de métiers verront 80% de leurs tâches automatisées, mais les 20% restants (relation client, gestion d'exception) garderont l'humain essentiel.
+
+## Questions que ce tableau soulève
+
+Que pensez-vous de cette grille ? Y a-t-il des professions où vous estimez que j'ai mal évalué le risque ? Et surtout, comment imaginez-vous que les "survivants" de chaque catégorie vont évoluer - vers plus de spécialisation, plus de relationnel, ou autre chose ?
+
 **Légende des scores :**
 - **Risque de disruption** : 1 (très faible) à 5 (très élevé)
 - **Capacité IA actuelle** : 1 (limitée) à 5 (égale/supérieure à l'humain)
