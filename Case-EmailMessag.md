@@ -2,7 +2,7 @@
 
 Excellente approche ! C'est effectivement une solution très élégante qui exploite le principe "controlled by parent" des EmailMessage. Voici comment l'implémenter :
 
-## Solution : Apex Sharing conditionnel sur les Cases
+## Solution : Apex Sharing conditionnel sur les Cases (Claude 4)
 
 ### 1. **Trigger sur EmailMessage**
 ```apex
