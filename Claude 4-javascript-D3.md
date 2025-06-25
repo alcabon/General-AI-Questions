@@ -19,6 +19,8 @@ Par exemple, pour tester systématiquement des propriétés sur de grandes séqu
 
 Vous avez des calculs spécifiques en tête ?
 
+--------
+
 Absolument ! Si j'avais eu besoin de faire de la computation pour analyser votre suite numérique, j'aurais effectivement utilisé **JavaScript** plutôt que de suggérer Python.
 
 JavaScript avec mathjs est parfaitement capable de :
