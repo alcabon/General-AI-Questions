@@ -198,3 +198,192 @@ Cette technique peut s'appliquer à d'autres scénarios similaires :
 C'est un pattern architectural fréquent dans Salesforce : **"Si tu ne peux pas contrôler l'enfant, contrôle le parent"**.
 
 Brillante analyse du problème ! 🎯
+
+Absolument ! Voici une version améliorée avec le pattern **Trigger Handler** standard :
+
+## 1. **Trigger léger (délégation)**
+```apex
+trigger EmailMessageSharingTrigger on EmailMessage (after insert, after update, after delete, after undelete) {
+    new EmailMessageTriggerHandler().run();
+}
+```
+
+## 2. **Handler principal**
+```apex
+public class EmailMessageTriggerHandler extends TriggerHandler {
+    
+    private List<EmailMessage> newRecords;
+    private List<EmailMessage> oldRecords;
+    private Map<Id, EmailMessage> newRecordsMap;
+    private Map<Id, EmailMessage> oldRecordsMap;
+    
+    public EmailMessageTriggerHandler() {
+        this.newRecords = (List<EmailMessage>) Trigger.new;
+        this.oldRecords = (List<EmailMessage>) Trigger.old;
+        this.newRecordsMap = (Map<Id, EmailMessage>) Trigger.newMap;
+        this.oldRecordsMap = (Map<Id, EmailMessage>) Trigger.oldMap;
+    }
+    
+    public override void afterInsert() {
+        handleSharingUpdate();
+    }
+    
+    public override void afterUpdate() {
+        handleSharingUpdate();
+    }
+    
+    public override void afterDelete() {
+        handleSharingUpdate();
+    }
+    
+    public override void afterUndelete() {
+        handleSharingUpdate();
+    }
+    
+    private void handleSharingUpdate() {
+        Set<Id> caseIds = EmailMessageSharingService.getCaseIdsToProcess(
+            this.newRecords, 
+            this.oldRecords
+        );
+        
+        if (!caseIds.isEmpty()) {
+            EmailMessageSharingService.updateCaseSharingAsync(caseIds);
+        }
+    }
+}
+```
+
+## 3. **Classe TriggerHandler abstraite (base)**
+```apex
+public virtual class TriggerHandler {
+    
+    private static Set<String> bypassedHandlers = new Set<String>();
+    
+    public void run() {
+        if (isBypassed()) return;
+        
+        switch on Trigger.operationType {
+            when BEFORE_INSERT { this.beforeInsert(); }
+            when BEFORE_UPDATE { this.beforeUpdate(); }
+            when BEFORE_DELETE { this.beforeDelete(); }
+            when AFTER_INSERT { this.afterInsert(); }
+            when AFTER_UPDATE { this.afterUpdate(); }
+            when AFTER_DELETE { this.afterDelete(); }
+            when AFTER_UNDELETE { this.afterUndelete(); }
+        }
+    }
+    
+    // Méthodes virtuelles à override
+    public virtual void beforeInsert() {}
+    public virtual void beforeUpdate() {}
+    public virtual void beforeDelete() {}
+    public virtual void afterInsert() {}
+    public virtual void afterUpdate() {}
+    public virtual void afterDelete() {}
+    public virtual void afterUndelete() {}
+    
+    // Bypass mechanism
+    public static void bypass(String handlerName) {
+        bypassedHandlers.add(handlerName);
+    }
+    
+    public static void clearBypass(String handlerName) {
+        bypassedHandlers.remove(handlerName);
+    }
+    
+    private Boolean isBypassed() {
+        return bypassedHandlers.contains(this.getTypeName());
+    }
+    
+    private String getTypeName() {
+        return String.valueOf(this).split(':')[0];
+    }
+}
+```
+
+## 4. **Service métier amélioré**
+```apex
+public class EmailMessageSharingService {
+    
+    public static Set<Id> getCaseIdsToProcess(List<EmailMessage> newRecords, List<EmailMessage> oldRecords) {
+        Set<Id> caseIds = new Set<Id>();
+        
+        // Traiter les nouveaux/modifiés
+        if (newRecords != null) {
+            for (EmailMessage em : newRecords) {
+                if (em.ParentId != null && em.ParentId.getSObjectType() == Case.SObjectType) {
+                    caseIds.add(em.ParentId);
+                }
+            }
+        }
+        
+        // Traiter les supprimés
+        if (oldRecords != null) {
+            for (EmailMessage em : oldRecords) {
+                if (em.ParentId != null && em.ParentId.getSObjectType() == Case.SObjectType) {
+                    caseIds.add(em.ParentId);
+                }
+            }
+        }
+        
+        return caseIds;
+    }
+    
+    @future
+    public static void updateCaseSharingAsync(Set<Id> caseIds) {
+        updateCaseSharing(caseIds);
+    }
+    
+    public static void updateCaseSharing(Set<Id> caseIds) {
+        // Identifier les Cases avec EmailMessage field1__c = 'A'
+        Map<Id, Boolean> caseRestrictionMap = new Map<Id, Boolean>();
+        
+        for (Case c : [SELECT Id, (SELECT Id FROM EmailMessages WHERE field1__c = 'A' LIMIT 1) 
+                      FROM Case WHERE Id IN :caseIds]) {
+            caseRestrictionMap.put(c.Id, !c.EmailMessages.isEmpty());
+        }
+        
+        // Supprimer/restaurer le partage selon les restrictions
+        handleCaseShareRecords(caseRestrictionMap);
+    }
+    
+    private static void handleCaseShareRecords(Map<Id, Boolean> caseRestrictionMap) {
+        List<CaseShare> toDelete = new List<CaseShare>();
+        List<CaseShare> toInsert = new List<CaseShare>();
+        
+        // Logique de suppression/création des CaseShare
+        for (Id caseId : caseRestrictionMap.keySet()) {
+            Boolean isRestricted = caseRestrictionMap.get(caseId);
+            
+            if (isRestricted) {
+                // Supprimer les partages existants
+                for (CaseShare cs : [SELECT Id FROM CaseShare 
+                                   WHERE CaseId = :caseId AND RowCause = 'Manual']) {
+                    toDelete.add(cs);
+                }
+            } else {
+                // Restaurer le partage si nécessaire
+                // Logique selon vos besoins métier
+            }
+        }
+        
+        if (!toDelete.isEmpty()) {
+            delete toDelete;
+        }
+        if (!toInsert.isEmpty()) {
+            Database.insert(toInsert, false);
+        }
+    }
+}
+```
+
+## Avantages du pattern Handler
+
+✅ **Séparation des responsabilités** - trigger vs logique métier  
+✅ **Testabilité** - mock/bypass possible  
+✅ **Maintenabilité** - code organisé et extensible  
+✅ **Réutilisabilité** - base TriggerHandler réutilisable  
+✅ **Performance** - gestion centralisée des bulks  
+✅ **Debugging** - bypass mechanism pour les tests  
+
+Ce pattern est une **best practice** Salesforce recommandée !
