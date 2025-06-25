@@ -981,7 +981,7 @@ Souhaitez-vous que je modifie ou ajoute des éléments spécifiques à ces diagr
 
 ```mermaid
 graph TB
-    subgraph "1. PROBLEME ARCHITECTURAL"
+    subgraph "1-PROBLEME ARCHITECTURAL"
         A[Case] -->|has| B["CaseShare ✅"]
         A -->|ParentId| C[EmailMessage]
         C -.->|"❌ EmailMessageShare n'existe pas"| D[Pas de controle direct]
@@ -993,7 +993,7 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph "2. MODELE DE DONNEES ET RELATIONS"
+    subgraph "2-MODELE DE DONNEES ET RELATIONS"
         subgraph "Objets avec Sharing"
             A1[Case]
             A2[Account] 
@@ -1033,7 +1033,7 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph "3. FLUX D'AUTHENTIFICATION OAUTH2"
+    subgraph "3-FLUX D'AUTHENTIFICATION OAUTH2"
         A[Application Cliente] -->|"1. Client Credentials"| B[Salesforce Login]
         B -->|"2. Access Token"| A
         A -->|"3. API Call + Token"| C[REST Endpoint]
@@ -1053,7 +1053,7 @@ graph LR
 
 ```mermaid
 graph TD
-    subgraph "4. ARCHITECTURE DE LA SOLUTION"
+    subgraph "4-ARCHITECTURE DE LA SOLUTION"
         A[API REST Call] -->|OAuth Token| B[Salesforce]
         B -->|"Execute as Run As User"| C{"Permission Set Check"}
         
@@ -1097,44 +1097,44 @@ sequenceDiagram
     participant Service as SharingService
     participant DB as Database
 
-    Note over Client,DB: 5. SEQUENCE D'EXECUTION
+    Note over Client,DB: 5-SEQUENCE D'EXECUTION
 
-    Client->>SF: 1. Client Credentials Flow
-    SF->>Client: 2. Access Token
+    Client->>SF: 1-Client Credentials Flow
+    SF->>Client: 2-Access Token
     
-    Client->>API: "3. POST EmailMessage (field1__c='A')"
-    API->>User: 4. Execute as Run As User
+    Client->>API: "3-POST EmailMessage (field1__c='A')"
+    API->>User: 4-Execute as Run As User
     
     User->>Trigger: 5. After Insert Trigger
-    Trigger->>Trigger: 6. Check Permission Set
+    Trigger->>Trigger: 6-Check Permission Set
     
     alt Has API_Dynamic_Case_Sharing Permission
-        Trigger->>Service: 7. handleSharingUpdate()
-        Service->>DB: 8. Query Case + EmailMessages
-        DB->>Service: 9. Return Case Data
+        Trigger->>Service: 7-handleSharingUpdate()
+        Service->>DB: 8-Query Case + EmailMessages
+        DB->>Service: 9-Return Case Data
         
         alt "EmailMessage with field1__c='A' exists"
-            Service->>DB: 10. Delete CaseShare records
+            Service->>DB: 10-Delete CaseShare records
             Note over Service,DB: Case becomes inaccessible
         else No restricted EmailMessages
-            Service->>DB: 11. Create/Restore CaseShare
+            Service->>DB: 11-Create/Restore CaseShare
             Note over Service,DB: Case becomes accessible
         end
         
-        Service->>Trigger: 12. Sharing Updated
+        Service->>Trigger: 12-Sharing Updated
     else No Permission
-        Note over Trigger: 13. Skip sharing logic
+        Note over Trigger: 13-Skip sharing logic
     end
     
-    Trigger->>API: 14. Trigger Complete
-    API->>Client: 15. Success Response
+    Trigger->>API: 14-Trigger Complete
+    API->>Client: 15-Success Response
 ```
 ```mermaid
 graph TB
-    subgraph "6. GESTION DES UTILISATEURS TECHNIQUES"
-        A["Connected App 1<br/>CRM Integration"] -->|Run As| B["crm.integration@company.com"]
-        C["Connected App 2<br/>BI Dashboard"] -->|Run As| D["bi.integration@company.com"]
-        E["Connected App 3<br/>Mobile App"] -->|Run As| F["mobile.integration@company.com"]
+    subgraph "6-GESTION DES UTILISATEURS TECHNIQUES"
+        A["Connected App 1<br/>CRM Integration"] -->|Run As| B["crm-integration@company_com"]
+        C["Connected App 2<br/>BI Dashboard"] -->|Run As| D["bi-integration@company_com"]
+        E["Connected App 3<br/>Mobile App"] -->|Run As| F["mobile-integration@company_com"]
         
         subgraph "Permission Set Management"
             G[API_Dynamic_Case_Sharing]
@@ -1162,7 +1162,7 @@ graph TB
 ```
 ```mermaid
 graph LR
-    subgraph "7. POINTS DE CONTROLE DE SECURITE"
+    subgraph "7-POINTS DE CONTROLE DE SECURITE"
         A[API Call] --> B{"OAuth Token Valid?"}
         B -->|No| C[401 Unauthorized]
         B -->|Yes| D{"User Has Permission Set?"}
