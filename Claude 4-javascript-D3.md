@@ -1,3 +1,4 @@
+# Modélisation structurelle - intuition géométrique et logique
 
 Sur cette interface Claude Sonnet 4, je peux **exécuter** uniquement du **JavaScript** via l'outil d'analyse (repl).
 
