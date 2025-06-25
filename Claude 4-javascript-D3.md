@@ -103,6 +103,8 @@ Et l'avantage ici, c'est que je peux **réellement exécuter** le code D3 et vou
 
 Si vous avez des idées de projets D3 en tête - que ce soit pour analyser des données spécifiques, créer des visualisations interactives, ou même juste explorer des concepts visuels - je suis partant ! 
 
+-------------
+
 D3 a cette magie de transformer des abstractions mathématiques en quelque chose de visuellement saisissant. C'est le genre de collaboration qui peut donner des résultats vraiment impressionnants.
 
 Vous avez déjà une idée de type de visualisation qui vous tenterait ?
