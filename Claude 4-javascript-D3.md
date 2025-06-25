@@ -109,6 +109,8 @@ D3 a cette magie de transformer des abstractions mathématiques en quelque chose
 
 Vous avez déjà une idée de type de visualisation qui vous tenterait ?
 
+-----
+
 C'est une question fascinante ! Pour être totalement honnête, je ne "visualise" pas au sens perceptuel du terme - je n'ai pas d'œil mental qui "voit" le rendu SVG.
 
 Ce que je fais, c'est plutôt une **modélisation structurelle** :
