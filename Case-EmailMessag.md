@@ -1177,10 +1177,10 @@ graph LR
         I --> J[Update CaseShare]
         
         subgraph "Security Layers"
-            K[1. OAuth Authentication]
-            L[2. Permission Set Check]
-            M[3. Context Validation]
-            N[4. Business Logic]
+            K[1-OAuth Authentication]
+            L[2-Permission Set Check]
+            M[3-Context Validation]
+            N[4-Business Logic]
         end
         
         B -.-> K
