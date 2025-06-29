@@ -5,13 +5,13 @@ Exactement ! Vous avez tout à fait raison. C'est **beaucoup plus élégant** et
 ## **Architecture finale simplifiée**
 
 ### **1. Organization-Wide Defaults**
-```
+```bash
 Setup → Security → Sharing Settings → Organization-Wide Defaults
 - Case: Private (bloc tout par défaut)
 ```
 
 ### **2. Public Group + Sharing Rule**
-```
+```bash
 Setup → Public Groups → New
 - Name: "API Integration Users"  
 - Type: Public Group
@@ -25,7 +25,7 @@ Setup → Case Sharing Rules → New
 ```
 
 ### **3. Connected App (inchangée)**
-```
+```bash
 Connected Apps → [Votre App] → Client Credentials Flow
 - Run As: integration.api@company.com (membre du Public Group)
 ```
@@ -34,9 +34,9 @@ Connected Apps → [Votre App] → Client Credentials Flow
 
 ```mermaid
 graph LR
-    A[Connected App] -->|Run As| B[integration.api@company.com]
-    B -->|Member of| C[Public Group: API Integration Users]
-    C -->|Sharing Rule| D[Access to Cases where field1__c != 'A']
+    A[Connected App] -->|Run As| B["integration.api@company.com"]
+    B -->|Member of| C["Public Group: API Integration Users"]
+    C -->|Sharing Rule| D["Access to Cases where field1__c != A"]
     D -->|Controlled by Parent| E[Access to EmailMessage enfants]
 ```
 
