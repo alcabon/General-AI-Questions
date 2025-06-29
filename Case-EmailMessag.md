@@ -1034,10 +1034,10 @@ graph TB
 ```mermaid
 graph LR
     subgraph "3-FLUX D'AUTHENTIFICATION OAUTH2"
-        A[Application Cliente] -->|"1. Client Credentials"| B[Salesforce Login]
-        B -->|"2. Access Token"| A
-        A -->|"3. API Call + Token"| C[REST Endpoint]
-        C -->|"4. Execution"| D["Utilisateur 'Run As'"]
+        A[Application Cliente] -->|"1-Client Credentials"| B[Salesforce Login]
+        B -->|"2-Access Token"| A
+        A -->|"3-API Call + Token"| C[REST Endpoint]
+        C -->|"4-Execution"| D["Utilisateur 'Run As'"]
         
         subgraph "Connected App Config"
             E["Consumer Key/Secret"]
