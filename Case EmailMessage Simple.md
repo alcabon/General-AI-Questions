@@ -34,7 +34,7 @@ Connected Apps → [Votre App] → Client Credentials Flow
 
 ```mermaid
 graph LR
-    A[Connected App] -->|Run As| B["integration.api@company.com"]
+    A[Connected App] -->|Run As| B["integration.api\@company.com"]
     B -->|Member of| C["Public Group: API Integration Users"]
     C -->|Sharing Rule| D["Access to Cases where field1__c != A"]
     D -->|Controlled by Parent| E[Access to EmailMessage enfants]
